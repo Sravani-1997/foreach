@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d7b1da24-595b-48e9-a695-80b15d893808" >
+		<http:listener-connection host="0.0.0.0" port="8080" />
+	</http:listener-config>
+	<flow name="foreachFlow" doc:id="c410759a-14c7-487a-b03f-d0592e85ee49" >
+		<http:listener doc:name="Listener" doc:id="d832ace5-b9e1-421c-8546-0a9b061578b4" config-ref="HTTP_Listener_config" path="/foreach"/>
+		<set-payload value="#[[1,2,3,4,5]]" doc:name="[1,2,3,4,5]" doc:id="8841957e-07ee-4d1e-9819-06ee90992530" />
+		<foreach doc:name="For Each" doc:id="48de7758-23ce-4979-afba-b144b09f54db" >
+			<set-payload value="#[payload*10]" doc:name="Set Payload" doc:id="382bd1b6-5d16-4eef-9cc1-ff56aa19025e" />
+		</foreach>
+		<ee:transform doc:name="Transform Message" doc:id="00eb16cd-c7d2-473f-96fa-24e3d575a61f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
